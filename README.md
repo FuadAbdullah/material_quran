@@ -5,9 +5,10 @@ A UI-focused Quran reader application developed using Flutter framework.
 ## Overview
 
 There are so many applications out there in the App Store and Google Play
-that gives users the comfort of reading Islam's Holy Book, The Quran,
-on-the-go. While this application is no different than those already online,
+that gives users the comfort of reading Muslims' Holy Book, The Quran,
+on-the-go.
 
+While this application is no different than those already online,
 Material Quran is developed with extensive implementation of attractive UI
 in mind. We believe that beautiful elements being displayed on the users'
 device are able to retain their will to recite at every moment possible.
