@@ -18,7 +18,9 @@ device are able to retain their will to recite at every moment possible.
 To be added at a later date once finalized.
 
 ## TODO
-
+- ~~Develop the front-end UI of the main menu page.~~
+- ~~Develop the front-end UI of the surah selection page.~~
+- ~~Develop the front-end UI of the surah reader page.~~
 - Develop the front-end UI of the main menu page.
 - Develop the front-end UI of the surah selection page.
 - Develop the front-end UI of the surah reader page.
@@ -27,11 +29,19 @@ To be added at a later date once finalized.
 - Develop the front-end UI of entire surah in one screen page (This idea may be scrapped if not feasible).
 - Develop the back-end for all the pages.
 - Develop the back-end for Quran API controller.
+- Improve the front-end UI of the main menu page.
+- Improve the front-end UI of the surah selection page.
+- Improve the front-end UI of the surah reader page.
+- Add appbar for surah reader page.
+- Create a library to store last read surah.
+- Relocate About Us page into drawer/settings.
+- Add a navigation bar to make flow of pages more natural.
 
 ## Credits
 
-Flutter, Dart and Google.
-Quran API.
-Google Fonts.
-Arabic Numbers
-(Links will be included at a later date).
+- Flutter, Dart and Google.
+- Quran API.
+- ~~Google Fonts~~. Unused for now
+- ~~Arabic Numbers~~. Unused for now
+- 
+- (Links will be included at a later date).
