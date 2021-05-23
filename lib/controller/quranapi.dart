@@ -3,57 +3,40 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 // import 'package:arabic_numbers/arabic_numbers.dart';
 
-
 class QuranAPICall {
-  QuranAPICall(
-      {@required this.domain,
-      @required this.reqUrl,
-      this.selectedSurah,
-      this.excludedText});
+  var domain, reqUrl, selectedSurah, excludedText;
 
-  final domain, reqUrl, selectedSurah, excludedText;
+  // Getters Setters
+  get getDomain => this.domain;
 
-  // Getters
-  getDomain() => this.domain;
+  get getReqUrl => this.reqUrl;
 
-  getReqUrl() => this.reqUrl;
+  get getSelectedSurah => this.selectedSurah;
 
-  getSelectedSurah() => this.selectedSurah;
+  get getExcludedText => this.excludedText;
 
-  getExcludedText() => this.excludedText;
+  set setDomain(domain) => this.domain = domain;
+
+  set setReqUrl(reqUrl) => this.reqUrl = reqUrl;
+
+  set setSelectedSurah(selectedSurah) => this.selectedSurah = selectedSurah;
+
+  set setExcludedText(excludedText) => this.excludedText = excludedText;
 
   Future<http.Response> getContent() =>
-      http.get(Uri.https(getDomain(), getReqUrl()));
+      http.get(Uri.https(getDomain, getReqUrl));
 
   Future<Surah> loadSurah() async {
     final res = await getContent();
     return checkAPICallResponse(res);
   }
 
-  // Future<SurahList> loadSurahList() async {
-  //   final res = await getContent();
-  //   if (res.statusCode == 200) {
-  //     return SurahList.fromJson(json.decode(res.body));
-  //   } else {
-  //     throw Exception("Failed to load surah list!");
-  //   }
-  // }
-
-  Future<SurahList> surahInfoJson() async {
-    final res = await getContent();
-    if (res.statusCode == 200) {
-      return SurahList.fromJson(json.decode(res.body));
-    } else {
-      throw Exception("Failed to load surah list!");
-    }
-  }
-
   checkAPICallResponse(res) {
     if (res.statusCode == 200) {
       var surah = Surah.fromJson(json.decode(res.body));
-      if (getSelectedSurah() != 1) {
+      if (getSelectedSurah != 1) {
         surah.verses[0]['text'] =
-            textExcluder(surah.verses[0]['text'], getExcludedText());
+            textExcluder(surah.verses[0]['text'], getExcludedText);
       }
       return surah;
     } else {
@@ -88,18 +71,5 @@ class Surah {
         title: json['data']['name'],
         titleEn: json['data']['englishName'],
         numberOfAyat: json['data']['numberOfAyahs']);
-  }
-}
-
-class SurahList {
-  int? code;
-  String? status;
-  var data;
-
-  SurahList({@required this.code, @required this.status, @required this.data});
-
-  factory SurahList.fromJson(Map<String, dynamic> json) {
-    return SurahList(
-        code: json['code'], status: json['status'], data: json['data']);
   }
 }

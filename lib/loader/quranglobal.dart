@@ -1,37 +1,43 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
-List surahNo = [],
-    surahName = [],
-    surahNameEn = [],
-    surahNameAr = [],
-    surahOrigin = [],
-    surahNumAyahs = [];
+List _surahNo = [],
+    _surahName = [],
+    _surahNameEn = [],
+    _surahNameAr = [],
+    _surahOrigin = [],
+    _surahNumAyahs = [],
+    _surahDescEn = [];
 
 Future<void> getLocalQuranInfo() async {
   final String response =
       await rootBundle.loadString('assets/json/surahinfo.json');
   final data = json.decode(response);
   for (int i = 0; i < 114; i++) {
-    surahNo.add(data['data'][i]['number']);
-    surahNameAr.add(data['data'][i]['name']);
-    surahName.add(data['data'][i]['englishName']);
-    surahNameEn.add(data['data'][i]['englishNameTranslation']);
-    surahNumAyahs.add(data['data'][i]['numberOfAyahs']);
-    surahOrigin.add(data['data'][i]['revelationType']);
-    print(
-        "${surahNo.elementAt(i)} ${surahNameAr.elementAt(i)} ${surahName.elementAt(i)} ${surahNameEn.elementAt(i)} ${surahNumAyahs.elementAt(i)} ${surahOrigin.elementAt(i)}");
+    _surahNo.add(data['data'][i]['number']);
+    _surahNameAr.add(data['data'][i]['name']);
+    _surahName.add(data['data'][i]['englishName']);
+    _surahNameEn.add(data['data'][i]['englishNameTranslation']);
+    _surahNumAyahs.add(data['data'][i]['numberOfAyahs']);
+    _surahOrigin.add(data['data'][i]['revelationType']);
+    _surahDescEn.add(data['data'][i]['englishDescription']);
+    // FOR DEBUG ONLY
+    // print(
+    //     "${_surahNo.elementAt(i)} ${_surahNameAr.elementAt(i)} ${_surahName.elementAt(i)} ${_surahNameEn.elementAt(i)} ${_surahNumAyahs.elementAt(i)} ${_surahOrigin.elementAt(i)}");
   }
 }
 
-List get getSurahNo => surahNo;
+List get getSurahNo => _surahNo;
 
-List get getSurahName => surahName;
+List get getSurahName => _surahName;
 
-List get getSurahNameEn => surahNameEn;
+List get getSurahNameEn => _surahNameEn;
 
-List get getSurahNameAr => surahNameAr;
+List get getSurahNameAr => _surahNameAr;
 
-List get getSurahOrigin => surahOrigin;
+List get getSurahOrigin => _surahOrigin;
 
-List get getSurahNumAyahs => surahNumAyahs;
+List get getSurahNumAyahs => _surahNumAyahs;
+
+List get getSurahDescEn => _surahDescEn;

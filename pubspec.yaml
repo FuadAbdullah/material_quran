@@ -78,7 +78,48 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: Al Qalam
+      fonts:
+        - asset: assets/font/AlQalam.ttf
+    - family: Ar Othmani
+      fonts:
+        - asset: assets/font/arOthmani.ttf
+    - family: Ar Quran
+      fonts:
+        - asset: assets/font/arQuran.ttf
+    - family: Maddina
+      fonts:
+        - asset: assets/font/Maddina.ttf
+    - family: Majeed
+      fonts:
+        - asset: assets/font/Majeed.ttf
+    - family: Majeed Variant 1
+      fonts:
+        - asset: assets/font/Majeed1.ttf
+    - family: Majeed Variant 2
+      fonts:
+        - asset: assets/font/Majeed2.ttf
+    - family: Me Quran
+      fonts:
+        - asset: assets/font/MeQuran.ttf
+    - family: Noor E Hidayat
+      fonts:
+        - asset: assets/font/NoorEHidayat.ttf
+    - family: Saleem
+      fonts:
+        - asset: assets/font/Saleem.ttf
+    - family: Amiri Regular
+      fonts:
+        - asset: assets/font/AmiriRegular.ttf
+        - asset: assets/font/AmiriItalic.ttf
+          style: italic
+    - family: Amiri Bold
+      fonts:
+        - asset: assets/font/AmiriBold.ttf
+        - asset: assets/font/AmiriBoldItalic.ttf
+          style: italic
+          weight: 700
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

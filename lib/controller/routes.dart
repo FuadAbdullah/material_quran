@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:materialquran/controller/quranapi.dart';
 import 'package:materialquran/loader/quranglobal.dart';
 import 'package:materialquran/ui/homepage.dart';
+import 'package:materialquran/ui/readerpage.dart';
 import 'package:materialquran/ui/surahpage.dart';
 
 // Initializer
@@ -61,10 +62,12 @@ class SurahSelectionMenu extends StatelessWidget {
 // This page displays the selected surah in full
 // There are plans to segregate long surah into pages
 class SurahReaderMenu extends StatelessWidget {
-  const SurahReaderMenu({Key? key}) : super(key: key);
+  const SurahReaderMenu({Key? key, required this.selectedSurahIndex}) : super(key: key);
+  final selectedSurahIndex;
 
+  // I passed the value via this dirty method...
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return SurahReaderPage(selectedSurahIndex: selectedSurahIndex, child: SurahReaderContainer());
   }
 }
