@@ -21,9 +21,6 @@ To be added at a later date once finalized.
 - ~~Develop the front-end UI of the main menu page.~~
 - ~~Develop the front-end UI of the surah selection page.~~
 - ~~Develop the front-end UI of the surah reader page.~~
-- Develop the front-end UI of the main menu page.
-- Develop the front-end UI of the surah selection page.
-- Develop the front-end UI of the surah reader page.
 - Develop the front-end UI of the about us page.
 - Develop the front-end UI of the search page (Search function is still in consideration).
 - Develop the front-end UI of entire surah in one screen page (This idea may be scrapped if not feasible).
@@ -43,5 +40,4 @@ To be added at a later date once finalized.
 - Quran API.
 - ~~Google Fonts~~. Unused for now
 - ~~Arabic Numbers~~. Unused for now
-- 
 - (Links will be included at a later date).
