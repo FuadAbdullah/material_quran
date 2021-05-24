@@ -21,7 +21,7 @@ To be added at a later date once finalized.
 - ~~Develop the front-end UI of the main menu page.~~
 - ~~Develop the front-end UI of the surah selection page.~~
 - ~~Develop the front-end UI of the surah reader page.~~
-- Develop the front-end UI of the about us page.
+- ~~Develop the front-end UI of the about us page.~~
 - Develop the front-end UI of the search page (Search function is still in consideration).
 - Develop the front-end UI of entire surah in one screen page (This idea may be scrapped if not feasible).
 - Develop the back-end for all the pages.
@@ -29,15 +29,15 @@ To be added at a later date once finalized.
 - Improve the front-end UI of the main menu page.
 - Improve the front-end UI of the surah selection page.
 - Improve the front-end UI of the surah reader page.
-- Add appbar for surah reader page.
+- ~~Add appbar for surah reader page.~~
 - Create a library to store last read surah.
-- Relocate About Us page into drawer/settings.
+- ~~Relocate About Us page into drawer/settings.~~
 - Add a navigation bar to make flow of pages more natural.
+- Improve About Us page with relevant information.
 
 ## Credits
 
 - Flutter, Dart and Google.
 - Quran API.
 - ~~Google Fonts~~. Unused for now
-- ~~Arabic Numbers~~. Unused for now
 - (Links will be included at a later date).
