@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:materialquran/controller/quranapi.dart';
+import 'package:materialquran/loader/quranglobal.dart';
 
 // Surah Reader Menu
 // This page displays the selected surah in full
@@ -28,6 +29,10 @@ class _SurahReaderPageState extends State<SurahReaderPage> {
 
   int get indexID => widget.selectedSurahIndex;
 
+  String get surahTitle => getSurahName.elementAt(indexID - 1);
+
+  String get surahTitleEn => getSurahNameEn.elementAt(indexID - 1);
+
   @override
   void initState() {
     super.initState();
@@ -48,10 +53,17 @@ class _SurahReaderPageState extends State<SurahReaderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text(surahTitle + " | " + surahTitleEn),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
         body: InheritedIndex(
-      child: widget.child,
-      data: this,
-    ));
+          child: widget.child,
+          data: this,
+        ));
   }
 }
 
@@ -87,7 +99,7 @@ class SurahReaderContainer extends StatelessWidget {
                         for (int i = 0; i < snapshot.data!.numberOfAyat; i++)
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                                20.0, 10.0, 20.0, 0.0),
+                                20.0, 10.0, 20.0, 10.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12.0),
@@ -96,25 +108,31 @@ class SurahReaderContainer extends StatelessWidget {
                                         color: Colors.grey.shade300,
                                         spreadRadius: 1.0)
                                   ]),
-                              child: RichText(
-                                text: TextSpan(
-                                    style: fontStyling("Me Quran"),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            "${snapshot.data!.verses[i]['text']} \uFD3F${i + 1}\uFD3E",
-                                      ),
-                                      // WidgetSpan(
-                                      //     child: Padding(
-                                      //         padding:
-                                      //             const EdgeInsets.symmetric(
-                                      //                 horizontal: 2.0,
-                                      //                 vertical: 10.0),
-                                      //         child: Icon(Icons.star)))
-                                    ]),
-                                textAlign: TextAlign.right,
-                                softWrap: true,
-                                textDirection: TextDirection.rtl,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    20.0, 10.0, 20.0, 10.0),
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: fontStyling("Me Quran"),
+                                      children: [
+                                        TextSpan(
+                                          text: "${snapshot.data!.verses[i]['text']}" +
+                                              " \uFD3F" +
+                                              "${getArabicNumber((i + 1).toString())}" +
+                                              "\uFD3E",
+                                        ),
+                                        // WidgetSpan(
+                                        //     child: Padding(
+                                        //         padding:
+                                        //             const EdgeInsets.symmetric(
+                                        //                 horizontal: 2.0,
+                                        //                 vertical: 10.0),
+                                        //         child: Icon(Icons.star)))
+                                      ]),
+                                  textAlign: TextAlign.right,
+                                  softWrap: true,
+                                  textDirection: TextDirection.rtl,
+                                ),
                               ),
                             ),
                           ),

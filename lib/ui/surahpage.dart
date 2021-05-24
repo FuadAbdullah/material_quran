@@ -40,18 +40,23 @@ class SurahSelectionContainer extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text("Surah | Chapters"),
+                  centerTitle: true,
+                ),
                 expandedHeight: 100.0,
+                floating: true,
                 leading: IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.arrow_back_ios)),
               ),
               SliverList(
                   delegate: SliverChildListDelegate([
-                    for (int i = 0; i < getSurahNo.length; i++)
-                      GenerateHeader(
-                        index: i,
-                      )
-                  ]))
+                for (int i = 0; i < getSurahNo.length; i++)
+                  GenerateHeader(
+                    index: i,
+                  )
+              ]))
             ],
           ),
         ));

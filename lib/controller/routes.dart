@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:materialquran/controller/quranapi.dart';
 import 'package:materialquran/loader/quranglobal.dart';
+import 'package:materialquran/ui/aboutus.dart';
 import 'package:materialquran/ui/homepage.dart';
 import 'package:materialquran/ui/readerpage.dart';
 import 'package:materialquran/ui/surahpage.dart';
@@ -71,3 +72,16 @@ class SurahReaderMenu extends StatelessWidget {
     return SurahReaderPage(selectedSurahIndex: selectedSurahIndex, child: SurahReaderContainer());
   }
 }
+
+// About Us Menu
+// This page displays the information about the
+// application as well as credits
+class AboutUsMenu extends StatelessWidget {
+  const AboutUsMenu({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AboutUsPage();
+  }
+}
+

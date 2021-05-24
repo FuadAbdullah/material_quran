@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:materialquran/controller/routes.dart';
+import 'package:materialquran/loader/quranglobal.dart';
 
 // Main Menu
 // This page is the first menu
@@ -13,13 +14,51 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Material Quran"),
-        centerTitle: true,
-      ),
-      body: HomePageContainer(),
-      endDrawer: Drawer(),
-    );
+        appBar: AppBar(
+          title: Text("Material Quran"),
+          centerTitle: true,
+        ),
+        body: HomePageContainer(),
+        endDrawer: Container(
+            width: getScreenSize(context),
+            child: Drawer(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/img/1.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                      Opacity(
+                        opacity: 0.5,
+                        child: Text("Material Quran",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.normal,
+                            )),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: getScreenSize(context),
+                    child: TextButton(
+                      child: Text("About Us"),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AboutUsMenu(),
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            )));
   }
 }
 
@@ -75,15 +114,6 @@ class HomePageContainer extends StatelessWidget {
                 width: 300,
                 child: ElevatedButton(
                   child: Text("Search"),
-                  onPressed: () {},
-                ),
-              ),
-              Divider(),
-              Container(
-                height: 50,
-                width: 300,
-                child: ElevatedButton(
-                  child: Text("About Us"),
                   onPressed: () {},
                 ),
               ),

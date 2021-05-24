@@ -28,6 +28,22 @@ Future<void> getLocalQuranInfo() async {
   }
 }
 
+// Returns 70% of the original screen size
+double getScreenSize(BuildContext context) =>
+    MediaQuery.of(context).size.width * 0.70;
+
+// Convert English numerals to Arabic
+String getArabicNumber(String enNumber) {
+  final enNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  final arNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+  for (int i = 0; i < 10; i++) {
+    enNumber = enNumber.replaceAll(RegExp(enNumerals[i]), arNumerals[i]);
+  }
+
+  return enNumber;
+}
+
 List get getSurahNo => _surahNo;
 
 List get getSurahName => _surahName;
