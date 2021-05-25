@@ -35,6 +35,9 @@ To be added at a later date once finalized.
 - Add a navigation bar to make flow of pages more natural.
 - Improve About Us page with relevant information.
 
+## Changelog (25/05/2021)
+- Implemented lazy loading to dynamically load surah list in surah selection page.
+
 ## Credits
 
 - Flutter, Dart and Google.
