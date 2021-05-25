@@ -7,57 +7,89 @@ import 'dart:convert';
 
 import 'package:materialquran/loader/quranglobal.dart';
 
-// Future<SurahList>? surahList;
-// final api = QuranAPICall(domain: "api.alquran.cloud", reqUrl: "v1/surah");
-// surahList = api.surahInfoJson();
-
 // Surah Selection Menu
 // This page allows users to select a surah
 // and redirect the users to another page
 
-class SurahSelectionPage extends StatefulWidget {
+class SurahSelectionPage extends StatelessWidget {
   const SurahSelectionPage({Key? key}) : super(key: key);
 
-  @override
-  _SurahSelectionPageState createState() => _SurahSelectionPageState();
-}
-
-class _SurahSelectionPageState extends State<SurahSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SurahSelectionContainer());
   }
 }
 
-class SurahSelectionContainer extends StatelessWidget {
+class SurahSelectionContainer extends StatefulWidget {
   const SurahSelectionContainer({Key? key}) : super(key: key);
+
+  @override
+  _SurahSelectionContainerState createState() =>
+      _SurahSelectionContainerState();
+}
+
+class _SurahSelectionContainerState extends State<SurahSelectionContainer> {
+  int size = 10;
+
+  bool _updateView(ScrollNotification notification) {
+    if (notification is ScrollEndNotification) {
+      if (notification.metrics.extentAfter == 0) {
+        updateSize();
+      }
+    }
+    return false;
+  }
+
+  void updateSize() {
+    if (size < 114) {
+      setState(() {
+        if (size + 10 > 114) {
+          size += 4;
+        } else if (size + 10 <= 114) {
+          size += 10;
+        }
+      });
+      print(size);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  //
+  // loadHeader() {
+  //   for (int z = i; z < size; i++) {
+  //     return GenerateHeader(index: z);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        child: Scrollbar(
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("Surah | Chapters"),
-                  centerTitle: true,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: _updateView,
+          child: Scrollbar(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text("Surah | Chapters"),
+                    centerTitle: true,
+                  ),
+                  expandedHeight: 100.0,
+                  floating: true,
+                  leading: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.arrow_back_ios)),
                 ),
-                expandedHeight: 100.0,
-                floating: true,
-                leading: IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.arrow_back_ios)),
-              ),
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                for (int i = 0; i < getSurahNo.length; i++)
-                  GenerateHeader(
-                    index: i,
-                  )
-              ]))
-            ],
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  for (int i= 0; i < size; i++) GenerateHeader(index: i)
+                ]))
+              ],
+            ),
           ),
         ));
   }
