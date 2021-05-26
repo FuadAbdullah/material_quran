@@ -36,8 +36,10 @@ To be added at a later date once finalized.
 - Program smart search function where user can search for surah title, surah keywords etc.
 - Program a feature to display last read surah.
 
-## Changelog (25/05/2021)
-- Implemented lazy loading to dynamically load surah list in surah selection page.
+## Changelog (26/05/2021)
+- Programmed the navigation bar to display pages respective to button tapped.
+- Added search page with placeholder text. Not functional for now.
+- Altered surah selection page behaviour to omit appbar when displayed from navigation bar or home page.
 
 ## Credits
 
