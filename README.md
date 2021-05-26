@@ -43,4 +43,5 @@ To be added at a later date once finalized.
 
 - Flutter, Dart and Google.
 - Quran API.
-- ~~Google Fonts~~. Unused for now\n(Links will be included at a later date).
+- ~~Google Fonts~~. Unused for now
+(Links will be included at a later date).
