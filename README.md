@@ -28,10 +28,10 @@ To be added at a later date once finalized.
 - ~~Add appbar for surah reader page.~~
 - ~~Relocate About Us page into drawer/settings.~~
 - ~~Add a navigation bar to make flow of pages more natural.~~
+- ~~Program the navigation bar to work properly.~~
 - Improve About Us page with relevant information.
 - Add Quran Recitation Recorder feature.
 - Modify the surah reader to allow for paged view.
-- Program the navigation bar to work properly.
 - Improve the front-end UI.
 - Program smart search function where user can search for surah title, surah keywords etc.
 - Program a feature to display last read surah.
