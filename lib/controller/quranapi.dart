@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-// import 'package:arabic_numbers/arabic_numbers.dart';
 
 class QuranAPICall {
   var domain, reqUrl, selectedSurah, excludedText;

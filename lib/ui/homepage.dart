@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:materialquran/controller/routes.dart';
 import 'package:materialquran/loader/quranglobal.dart';
+import 'package:materialquran/ui/aboutus.dart';
+import 'package:materialquran/ui/searchpage.dart';
+import 'package:materialquran/ui/surahpage.dart';
 
 // Main Menu
 // This page is the first menu
@@ -8,17 +10,45 @@ import 'package:materialquran/loader/quranglobal.dart';
 // All buttons leading to different
 // pages are found here
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currIndex = 0;
+  final List<Widget> _children = [
+    HomePageContainer(),
+    SurahSelectionContainer(fromNavBar: true),
+    SearchPageContainer()
+  ];
+
+  void onTapTabbed(int index) {
+    setState(() {
+      _currIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: onTapTabbed,
+          currentIndex: _currIndex,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.image), label: "Surah"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.search), label: "Search")
+          ],
+        ),
         appBar: AppBar(
           title: Text("Material Quran"),
           centerTitle: true,
         ),
-        body: HomePageContainer(),
+        body: _children[_currIndex],
         endDrawer: Container(
             width: getScreenSize(context),
             child: Drawer(
@@ -52,7 +82,7 @@ class HomePage extends StatelessWidget {
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AboutUsMenu(),
+                            builder: (context) => AboutUsPage(),
                           )),
                     ),
                   )
@@ -90,8 +120,13 @@ class HomePageContainer extends StatelessWidget {
                 height: 50,
                 width: 300,
                 child: ElevatedButton(
-                  child: Text("Holy Quran"),
-                  onPressed: () {},
+                  child: Text("Read Quran"),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SurahSelectionPage(fromNavBar: false)));
+                  },
                 ),
               ),
               Divider(),
@@ -99,13 +134,8 @@ class HomePageContainer extends StatelessWidget {
                 height: 50,
                 width: 300,
                 child: ElevatedButton(
-                  child: Text("Surah Selection"),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SurahSelectionMenu()));
-                  },
+                  child: Text("Recite"),
+                  onPressed: () {},
                 ),
               ),
               Divider(),

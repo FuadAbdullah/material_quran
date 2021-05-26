@@ -1,27 +1,25 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:materialquran/controller/quranapi.dart';
-import 'package:materialquran/controller/routes.dart';
-import 'dart:convert';
-
 import 'package:materialquran/loader/quranglobal.dart';
+import 'package:materialquran/ui/readerpage.dart';
 
 // Surah Selection Menu
 // This page allows users to select a surah
 // and redirect the users to another page
 
 class SurahSelectionPage extends StatelessWidget {
-  const SurahSelectionPage({Key? key}) : super(key: key);
+  final fromNavBar;
+  const SurahSelectionPage({Key? key, required this.fromNavBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SurahSelectionContainer());
+    return Scaffold(body: SurahSelectionContainer(fromNavBar: fromNavBar,));
   }
 }
 
 class SurahSelectionContainer extends StatefulWidget {
-  const SurahSelectionContainer({Key? key}) : super(key: key);
+  // Dirty passing. Can apply InheritedWidget
+  final fromNavBar;
+  const SurahSelectionContainer({Key? key, required this.fromNavBar}) : super(key: key);
 
   @override
   _SurahSelectionContainerState createState() =>
@@ -57,12 +55,24 @@ class _SurahSelectionContainerState extends State<SurahSelectionContainer> {
   void dispose() {
     super.dispose();
   }
-  //
-  // loadHeader() {
-  //   for (int z = i; z < size; i++) {
-  //     return GenerateHeader(index: z);
-  //   }
-  // }
+
+  enableAppBar() {
+    if (widget.fromNavBar) {
+      return SliverList(delegate: SliverChildListDelegate([]));
+    } else {
+      return SliverAppBar(
+        flexibleSpace: FlexibleSpaceBar(
+          title: Text("Surah | Chapters"),
+          centerTitle: true,
+        ),
+        expandedHeight: 100.0,
+        floating: true,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios)),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +83,10 @@ class _SurahSelectionContainerState extends State<SurahSelectionContainer> {
           child: Scrollbar(
             child: CustomScrollView(
               slivers: [
-                SliverAppBar(
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text("Surah | Chapters"),
-                    centerTitle: true,
-                  ),
-                  expandedHeight: 100.0,
-                  floating: true,
-                  leading: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.arrow_back_ios)),
-                ),
+                enableAppBar(),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  for (int i= 0; i < size; i++) GenerateHeader(index: i)
+                  for (int i = 0; i < size; i++) GenerateHeader(index: i)
                 ]))
               ],
             ),
@@ -111,9 +111,9 @@ class _GenerateHeaderState extends State<GenerateHeader> {
     return Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => SurahReaderMenu(
-                  selectedSurahIndex: widget.index + 1,
-                )));
+            builder: (context) => SurahReaderPage(
+                selectedSurahIndex: widget.index + 1,
+                child: SurahReaderContainer())));
   }
 
   @override
@@ -228,7 +228,7 @@ class _GenerateHeaderState extends State<GenerateHeader> {
                           ],
                         ),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Spacer(
