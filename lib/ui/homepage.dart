@@ -147,6 +147,15 @@ class HomePageContainer extends StatelessWidget {
                   onPressed: () {},
                 ),
               ),
+              Divider(),
+              Container(
+                height: 50,
+                width: 300,
+                child: ElevatedButton(
+                  child: Text("Last Read"),
+                  onPressed: () {},
+                ),
+              ),
             ],
           ),
         ));
