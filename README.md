@@ -29,17 +29,16 @@ To be added at a later date once finalized.
 - ~~Relocate About Us page into drawer/settings.~~
 - ~~Add a navigation bar to make flow of pages more natural.~~
 - ~~Program the navigation bar to work properly.~~
+- ~~Modify the surah reader to allow for paged view.~~
 - Improve About Us page with relevant information.
 - Add Quran Recitation Recorder feature.
-- Modify the surah reader to allow for paged view.
 - Improve the front-end UI.
 - Program smart search function where user can search for surah title, surah keywords etc.
 - Program a feature to display last read surah.
 
-## Changelog (26/05/2021)
-- Programmed the navigation bar to display pages respective to button tapped.
-- Added search page with placeholder text. Not functional for now.
-- Altered surah selection page behaviour to omit appbar when displayed from navigation bar or home page.
+## Changelog (29/05/2021)
+- Replaced surah reader page with a PageView.
+- Added navigation bar for surah reader page for users to navigate forward or backward vice-versa.
 
 ## Credits
 
