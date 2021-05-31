@@ -36,9 +36,8 @@ To be added at a later date once finalized.
 - Program smart search function where user can search for surah title, surah keywords etc.
 - Program a feature to display last read surah.
 
-## Changelog (29/05/2021)
-- Replaced surah reader page with a PageView.
-- Added navigation bar for surah reader page for users to navigate forward or backward vice-versa.
+## Changelog (31/05/2021)
+- Added and programmed Cupertino Picker as page jump option to allow users to jump to specific page of the Surah.
 
 ## Credits
 
