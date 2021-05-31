@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:materialquran/controller/quranapi.dart';
 import 'package:materialquran/loader/quranglobal.dart';
@@ -7,10 +8,7 @@ import 'package:materialquran/loader/quranglobal.dart';
 // There are plans to segregate long surah into pages
 
 class SurahReaderPage extends StatefulWidget {
-  final Widget child;
-
-  const SurahReaderPage(
-      {Key? key, required this.selectedSurahIndex, required this.child})
+  const SurahReaderPage({Key? key, required this.selectedSurahIndex})
       : super(key: key);
 
   static _SurahReaderPageState of(BuildContext context) {
@@ -41,7 +39,7 @@ class _SurahReaderPageState extends State<SurahReaderPage> {
 
   void loadSequence() {
     const domain = "api.alquran.cloud";
-    var reqUrl = "v1/surah/$indexID";
+    var reqUrl = "v1/surah/$indexID/ar.alafasy";
     final api = QuranAPICall();
     api.setDomain = domain;
     api.setReqUrl = reqUrl;
@@ -61,84 +59,9 @@ class _SurahReaderPageState extends State<SurahReaderPage> {
           ),
         ),
         body: InheritedIndex(
-          child: widget.child,
+          child: SurahPageBuilder(),
           data: this,
         ));
-  }
-}
-
-class SurahReaderContainer extends StatelessWidget {
-  const SurahReaderContainer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SurahPageBuilder();
-
-    //   Container(
-    //   alignment: Alignment.center,
-    //   child: Column(
-    //     mainAxisAlignment: MainAxisAlignment.start,
-    //     mainAxisSize: MainAxisSize.min,
-    //     children: [
-    //       FutureBuilder<Surah>(
-    //         builder: (context, snapshot) {
-    //           if (snapshot.hasData) {
-    //             return Expanded(
-    //               child: Scrollbar(
-    //                 isAlwaysShown: true,
-    //                 hoverThickness: 20.0,
-    //                 thickness: 10.0,
-    //                 radius: Radius.circular(2.0),
-    //                 child: ListView(
-    //                   shrinkWrap: true,
-    //                   children: <Widget>[
-    //                     for (int i = 0; i < snapshot.data!.numberOfAyat; i++)
-    //                       Padding(
-    //                         padding: const EdgeInsets.fromLTRB(
-    //                             20.0, 10.0, 20.0, 10.0),
-    //                         child: Container(
-    //                           decoration: BoxDecoration(
-    //                               borderRadius: BorderRadius.circular(12.0),
-    //                               boxShadow: [
-    //                                 BoxShadow(
-    //                                     color: Colors.grey.shade300,
-    //                                     spreadRadius: 1.0)
-    //                               ]),
-    //                           child: Padding(
-    //                             padding: const EdgeInsets.fromLTRB(
-    //                                 20.0, 10.0, 20.0, 10.0),
-    //                             child: RichText(
-    //                               text: TextSpan(
-    //                                   style: fontStyling("Me Quran"),
-    //                                   children: [
-    //                                     TextSpan(
-    //                                       text: "${snapshot.data!.verses[i]['text']}" +
-    //                                           " \uFD3F" +
-    //                                           "${getArabicNumber((i + 1).toString())}" +
-    //                                           "\uFD3E",
-    //                                     ),
-    //                                   ]),
-    //                               textAlign: TextAlign.right,
-    //                               softWrap: true,
-    //                               textDirection: TextDirection.rtl,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             );
-    //           } else if (snapshot.hasError) {
-    //             return Text("${snapshot.error}");
-    //           }
-    //           return CircularProgressIndicator();
-    //         },
-    //         future: SurahReaderPage.of(context).futureSurah,
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }
 
@@ -151,6 +74,7 @@ class SurahPageBuilder extends StatefulWidget {
 
 class _SurahPageBuilderState extends State<SurahPageBuilder> {
   double? _focusedIndex = 0;
+  int? _pickerNum = 0;
   int? _pageCount;
   ScrollController? _scrollController;
   PageController? _pageController;
@@ -204,6 +128,13 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
     }
   }
 
+  void _pickerSetPage() {
+    setState(() {
+      _pageController!.jumpToPage(_pickerNum!);
+    });
+    Navigator.of(context).pop(context);
+  }
+
   Widget _pageContent(snapshot, index) {
     return Container(
         child: Padding(
@@ -213,13 +144,16 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
               child: ListView(
                 children: [
                   Container(
+                      constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.height -
+                              (AppBar().preferredSize.height + 150)),
                       child: Card(
                         color: Colors.white70,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(16.0),
                               width: MediaQuery.of(context).size.width,
                               child: RichText(
                                 text: TextSpan(
@@ -234,6 +168,14 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
                                     ]),
                                 textAlign: TextAlign.right,
                                 textDirection: TextDirection.rtl,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Divider(
+                                color: Colors.black12,
+                                thickness: 2.0,
                               ),
                             ),
                           ],
@@ -291,8 +233,10 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
-        Text(
-            "${_focusedIndex!.toInt() + 1}/${getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1]}"),
+        IconButton(
+          icon: Icon(Icons.filter_list_rounded),
+          onPressed: () => _popModalBottomSheet(context),
+        ),
         IconButton(
           onPressed: () {
             _nextPage();
@@ -303,6 +247,89 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
     );
   }
 
+  Widget _bottomPageCounter() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+              "${_focusedIndex!.toInt() + 1}/${getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1]}")
+        ]);
+  }
+
+  _popModalBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              boxShadow: [
+                const BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 14,
+                    spreadRadius: 4,
+                    offset: Offset(0, -5)),
+              ]),
+          height: 300,
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              SizedBox(
+                  child: _cupertinoSinglePicker(), width: 150, height: 200),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: CupertinoButton(
+                      child: Text("Confirm"),
+                      onPressed: () => _pickerSetPage(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: CupertinoButton(
+                      child: Text("Return"),
+                      onPressed: () => {Navigator.of(context).pop()},
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )),
+    );
+  }
+
+  _cupertinoSinglePicker() {
+    return CupertinoPicker(
+      looping: true,
+      itemExtent: 50,
+      children: <Widget>[
+        for (int i = 1;
+            i <= getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1];
+            i++)
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              i.toString(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ))
+      ],
+      onSelectedItemChanged: (value) {
+        _pickerNum = value;
+      },
+      scrollController:
+          FixedExtentScrollController(initialItem: _focusedIndex!.toInt()),
+    );
+  }
+
   Widget _mainScreen() {
     return Container(
       child: Column(
@@ -310,6 +337,7 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
         children: <Widget>[
           Expanded(child: Container(child: _pageBuilder())),
           Container(height: 50, child: _bottomNavBar()),
+          Container(height: 50, child: _bottomPageCounter())
         ],
       ),
     );

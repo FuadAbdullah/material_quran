@@ -8,18 +8,25 @@ import 'package:materialquran/ui/readerpage.dart';
 
 class SurahSelectionPage extends StatelessWidget {
   final fromNavBar;
-  const SurahSelectionPage({Key? key, required this.fromNavBar}) : super(key: key);
+
+  const SurahSelectionPage({Key? key, required this.fromNavBar})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SurahSelectionContainer(fromNavBar: fromNavBar,));
+    return Scaffold(
+        body: SurahSelectionContainer(
+      fromNavBar: fromNavBar,
+    ));
   }
 }
 
 class SurahSelectionContainer extends StatefulWidget {
   // Dirty passing. Can apply InheritedWidget
   final fromNavBar;
-  const SurahSelectionContainer({Key? key, required this.fromNavBar}) : super(key: key);
+
+  const SurahSelectionContainer({Key? key, required this.fromNavBar})
+      : super(key: key);
 
   @override
   _SurahSelectionContainerState createState() =>
@@ -111,9 +118,8 @@ class _GenerateHeaderState extends State<GenerateHeader> {
     return Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => SurahReaderPage(
-                selectedSurahIndex: widget.index + 1,
-                child: SurahReaderContainer())));
+            builder: (context) =>
+                SurahReaderPage(selectedSurahIndex: widget.index + 1)));
   }
 
   @override
