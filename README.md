@@ -36,8 +36,8 @@ To be added at a later date once finalized.
 - Program smart search function where user can search for surah title, surah keywords etc.
 - Program a feature to display last read surah.
 
-## Changelog (31/05/2021)
-- Added and programmed Cupertino Picker as page jump option to allow users to jump to specific page of the Surah.
+## Changelog (04/06/2021)
+- Implemented Recite API backend code for account creation, account availability checker, Recite Time balance checker, and Recite Submission Privilege checker.
 
 ## Credits
 

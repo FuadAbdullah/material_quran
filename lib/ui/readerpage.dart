@@ -146,7 +146,7 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
                   Container(
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height -
-                              (AppBar().preferredSize.height + 150)),
+                              (AppBar().preferredSize.height + 100)),
                       child: Card(
                         color: Colors.white70,
                         child: Column(
@@ -190,15 +190,21 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
     return FutureBuilder<Surah>(
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return PageView.builder(
-            controller: _pageController,
-            itemBuilder: (context, index) {
-              return _pageContent(snapshot, index);
-            },
-            pageSnapping: true,
-            scrollDirection: Axis.horizontal,
-            itemCount:
-                getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1],
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.mic),
+            ),
+            body: PageView.builder(
+              controller: _pageController,
+              itemBuilder: (context, index) {
+                return _pageContent(snapshot, index);
+              },
+              pageSnapping: true,
+              scrollDirection: Axis.horizontal,
+              itemCount:
+              getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1],
+            ),
           );
         } else if (snapshot.hasError) {
           return Container(
@@ -233,9 +239,23 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
-        IconButton(
-          icon: Icon(Icons.filter_list_rounded),
+        TextButton(
           onPressed: () => _popModalBottomSheet(context),
+          child: RichText(
+            text: TextSpan(
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(
+                      text:
+                          "${_focusedIndex!.toInt() + 1}/${getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1]}"),
+                  WidgetSpan(
+                      child: Icon(Icons.arrow_drop_up_rounded,
+                          color: Colors.black))
+                ]),
+          ),
         ),
         IconButton(
           onPressed: () {
@@ -245,15 +265,6 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
         ),
       ],
     );
-  }
-
-  Widget _bottomPageCounter() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Text(
-              "${_focusedIndex!.toInt() + 1}/${getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1]}")
-        ]);
   }
 
   _popModalBottomSheet(BuildContext context) {
@@ -271,31 +282,25 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
                     spreadRadius: 4,
                     offset: Offset(0, -5)),
               ]),
-          height: 300,
+          height: 255,
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
-                  child: _cupertinoSinglePicker(), width: 150, height: 200),
+                  child: _cupertinoSinglePicker(), width: MediaQuery.of(context).size.width, height: 200),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: CupertinoButton(
-                      child: Text("Confirm"),
-                      onPressed: () => _pickerSetPage(),
-                    ),
+                  CupertinoButton(
+                    child: Text("Confirm"),
+                    onPressed: () => _pickerSetPage(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: CupertinoButton(
-                      child: Text("Return"),
-                      onPressed: () => {Navigator.of(context).pop()},
-                    ),
+                  CupertinoButton(
+                    child: Text("Return"),
+                    onPressed: () => {Navigator.of(context).pop()},
                   ),
                 ],
               )
@@ -337,7 +342,6 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
         children: <Widget>[
           Expanded(child: Container(child: _pageBuilder())),
           Container(height: 50, child: _bottomNavBar()),
-          Container(height: 50, child: _bottomPageCounter())
         ],
       ),
     );
