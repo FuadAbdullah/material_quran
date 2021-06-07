@@ -36,8 +36,8 @@ To be added at a later date once finalized.
 - Program smart search function where user can search for surah title, surah keywords etc.
 - Program a feature to display last read surah.
 
-## Changelog (04/06/2021)
-- Implemented Recite API backend code for account creation, account availability checker, Recite Time balance checker, and Recite Submission Privilege checker.
+## Changelog (07/06/2021)
+- Implemented Connection Time out and Socket exceptions to Recite submission sequence.
 
 ## Credits
 

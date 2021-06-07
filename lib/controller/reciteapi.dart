@@ -1,20 +1,32 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 abstract class ReciteAPI {
   // TODO
-  // include username, email, password
-  // include domain and url
-  // include get https and post https
-  String username, email, password, domain, url;
+  String userToken,
+      username,
+      email,
+      password,
+      chapter,
+      verse,
+      submissionUrl,
+      domain,
+      url;
 
   ReciteAPI(
-      {this.username = 'abc123',
+      {this.userToken = "randomtoken",
+      this.username = 'abc123',
       this.email = 'abc123@gmail.com',
       this.password = 'tQB4xj0tLd',
+      this.chapter = '1',
+      this.verse = '1',
+      this.submissionUrl = 'dummy/url/no/actual/data',
       this.domain = '192.168.0.69:3000',
       this.url = 'users/check?email=abc123@gmail.com'});
+
+  String get getUserToken => userToken;
 
   String get getUsername => username;
 
@@ -22,9 +34,17 @@ abstract class ReciteAPI {
 
   String get getPassword => password;
 
+  String get getChapter => chapter;
+
+  String get getVerse => verse;
+
+  String get getSubmissionUrl => submissionUrl;
+
   String get getDomain => domain;
 
   String get getUrl => url;
+
+  set setUserToken(userToken) => this.userToken = userToken;
 
   set setUsername(username) => this.username = username;
 
@@ -32,12 +52,18 @@ abstract class ReciteAPI {
 
   set setPassword(password) => this.password = password;
 
+  set setChapter(chapter) => this.chapter = chapter;
+
+  set setVerse(verse) => this.verse = verse;
+
+  set setSubmissionUrl(submissionUrl) => this.submissionUrl = submissionUrl;
+
   set setDomain(domain) => this.domain = domain;
 
   set setUrl(url) => this.url = url;
 
   // Currently set to HTTP protocol due to local hosting
-  Future<http.Response> get(paramList) =>
+  Future<http.Response> get(Map<String, String> paramList) =>
       http.get(Uri.http(getDomain, getUrl, paramList));
 
   // Currently set to HTTP protocol due to local hosting
@@ -59,7 +85,7 @@ class CheckUserAvailability extends ReciteAPI {
 
   Future<dynamic> userIsAvailable() async {
     final paramList = {'email': getEmail};
-    final response = await get(paramList);
+    final response = await get(paramList).timeout(Duration(seconds: 10));
     if (response.statusCode == 200) {
       return true;
     }
@@ -127,13 +153,11 @@ class GetReciteTime extends ReciteAPI {
       : super(email: email, url: url);
 
   Future<String> getReciteTime() async {
-    final paramList = {
-      'email': getEmail
-    };
+    final paramList = {'email': getEmail};
     final response = await get(paramList);
     if (response.statusCode == 200) {
       final reciteTime = (double.parse(response.body) ~/ 60);
-      return 'Recite Time balance in minute: $reciteTime';
+      return '$reciteTime';
     }
     if (response.statusCode == 404) {
       return 'User not found';
@@ -154,9 +178,7 @@ class GetSubmissionPermission extends ReciteAPI {
       : super(email: email, url: url);
 
   Future<dynamic> getSubmissionPermission() async {
-    final paramList = {
-      'email': getEmail
-    };
+    final paramList = {'email': getEmail};
     final response = await get(paramList);
     if (response.statusCode == 200) {
       final canSubmit = response.body.parseBool();
@@ -169,10 +191,46 @@ class GetSubmissionPermission extends ReciteAPI {
   }
 }
 
-// Untested
+// Testing and working
 class CreateSubmission extends ReciteAPI {
-  // TODO
-  // Create submission API integration
+  @override
+  @override
+  @override
+  @override
+  final String userToken, chapter, verse, submissionUrl, url;
+
+  CreateSubmission(
+      {required this.userToken,
+      required this.chapter,
+      required this.verse,
+      required this.submissionUrl,
+      required this.url})
+      : super(
+            userToken: userToken,
+            chapter: chapter,
+            verse: verse,
+            submissionUrl: submissionUrl,
+            url: url);
+
+  Future<String> submissionStatus() async {
+    final _body =
+        '{ "chapter": "$chapter", "verse": "$verse", "submissionURI": "$submissionUrl" }';
+    final _header = {
+      'Content-Type': 'application/json',
+      'Authorization': '$userToken'
+    };
+    final response = await post(_body, _header);
+    if (response.statusCode == 200) {
+      return 'Submitted';
+    }
+    if (response.statusCode == 400) {
+      return 'Failed';
+    }
+    if (response.statusCode == 401) {
+      return 'NotLoggedIn';
+    }
+    return 'Unhandled exception occurred!';
+  }
 }
 
 // Abstract

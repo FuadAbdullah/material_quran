@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:materialquran/controller/quranapi.dart';
+import 'package:materialquran/controller/reciteapi.dart';
 import 'package:materialquran/loader/quranglobal.dart';
 
 // Surah Reader Menu
@@ -192,7 +196,7 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
         if (snapshot.hasData) {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () => _cupertinoDialog(),
               child: Icon(Icons.mic),
             ),
             body: PageView.builder(
@@ -203,7 +207,7 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
               pageSnapping: true,
               scrollDirection: Axis.horizontal,
               itemCount:
-              getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1],
+                  getSurahNumAyahs[SurahReaderPage.of(context).indexID - 1],
             ),
           );
         } else if (snapshot.hasError) {
@@ -227,6 +231,252 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
       },
       future: SurahReaderPage.of(context).futureSurah,
     );
+  }
+
+  void _cupertinoDialog() {
+    String title = SurahReaderPage.of(context).surahTitle;
+    int verse = _focusedIndex!.toInt() + 1;
+    showDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+              title: Text("Recording complete."),
+              content: Text(
+                  "Your audio recording for verse $verse of Surah $title is finished. Would you like to submit?"),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: Text("Submit"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (context) => _userAvailabilityBuilder());
+                  },
+                ),
+                CupertinoDialogAction(
+                    child: Text("Cancel"),
+                    onPressed: () => Navigator.pop(context),
+                    isDefaultAction: true,
+                    isDestructiveAction: true)
+              ],
+            ));
+  }
+
+  Widget _userAvailabilityBuilder() {
+    return FutureBuilder<String>(
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data!) {
+            case "UserNotFound":
+              return CupertinoAlertDialog(
+                title: Text("User not found."),
+                content: Text("Failed to find user by the email specified."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            case "InsufficientReciteBalance":
+              return CupertinoAlertDialog(
+                title: Text("Insufficient Recite Time balance."),
+                content: Text(
+                    "Your Recite time balance is insufficient for this submission.\nPlease topup and try again."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            case "Submitted":
+              return CupertinoAlertDialog(
+                title: Text("Submission successful."),
+                content:
+                    Text("Your audio recording has been submitted for review."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            case "Failed":
+              return CupertinoAlertDialog(
+                title: Text("Submission failed."),
+                content: Text(
+                    "Your audio recording failed to be submitted.\nRetry in a while or contact customer support."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            case "NotLoggedIn":
+              return CupertinoAlertDialog(
+                title: Text("Unauthorized submission."),
+                content: Text(
+                    "You have not logged into Recite account.\nPlease login to submit."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            case "ConnectionTimedOut":
+              return CupertinoAlertDialog(
+                title: Text("Connection timed out."),
+                content: Text(
+                    "Attempt to establish communication with the server failed.\nPlease try again later."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            case "NoInternet":
+              return CupertinoAlertDialog(
+                title: Text("No internet connection."),
+                content: Text(
+                    "Your device may not have an active internet connection.\nRecite feature requires an active internet."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              );
+            default:
+              return CupertinoAlertDialog(
+                title: Text("Unhandled exception occurred."),
+                content: Text(
+                    "The application had encountered an unhandled back-end error. Report the condition to developers if it persist."),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context),
+                      isDefaultAction: true,
+                      isDestructiveAction: true)
+                ],
+              ); //Unhandled exception
+          }
+        }
+        if (snapshot.hasError) {
+          return CupertinoAlertDialog(
+            title: Text("Encountered Exception"),
+            content: Text("Error: ${snapshot.error}"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                  child: Text("OK"),
+                  onPressed: () => Navigator.pop(context),
+                  isDefaultAction: true,
+                  isDestructiveAction: true)
+            ],
+          );
+        }
+        return Container(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+              ],
+            ));
+      },
+      future: _submissionToRecite(),
+    );
+  }
+
+  Future<String> _submissionToRecite() async {
+    final email = "fab072301@gmail.com";
+    final userToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGJiN2MzOWVkYmQyZTJiN2QwMWM3MGEiLCJpYXQiOjE2MjI4OTk3Njl9.4djAZoB1hDzHoWFDDAV_t_h5U5XwwC590fdzvRp5ESg";
+    final chapter = (SurahReaderPage.of(context).indexID - 1).toString();
+    final verse = (_focusedIndex!.toInt() + 1).toString();
+    final submissionUrl = "dummy/uri/for/now";
+
+    final userIsAvailable = await _checkUserAvailability(email);
+    if (userIsAvailable is String) {
+      return userIsAvailable;
+    } else if (userIsAvailable) {
+      final canSubmit = await _checkSubmissionPermission(email);
+      if (canSubmit is String) {
+        return canSubmit;
+      } else if (canSubmit) {
+        final submissionStatus =
+            await _createSubmission(userToken, chapter, verse, submissionUrl);
+        return submissionStatus;
+      } else {
+        return "InsufficientReciteBalance";
+      }
+    } else {
+      return "UserNotFound";
+    }
+  }
+
+  Future<dynamic> _checkUserAvailability(email) async {
+    final url = "users/check",
+        checkUserAvailability = CheckUserAvailability(email: email, url: url);
+    try {
+      final userIsAvailable = await checkUserAvailability
+          .userIsAvailable()
+          .timeout(Duration(seconds: 10));
+      return userIsAvailable;
+    } on TimeoutException catch (_) {
+      return "ConnectionTimedOut";
+    } on SocketException catch (_) {
+      return "NoInternet";
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<dynamic> _checkSubmissionPermission(email) async {
+    final url = "users/canSubmit",
+        getSubmissionPermission =
+            GetSubmissionPermission(email: email, url: url);
+    try {
+      final canSubmit = await getSubmissionPermission.getSubmissionPermission();
+      return canSubmit;
+    } on TimeoutException catch (_) {
+      return "ConnectionTimedOut";
+    } on SocketException catch (_) {
+      return "NoInternet";
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<String> _createSubmission(
+      userToken, chapter, verse, submissionUrl) async {
+    final url = "recital",
+        createSubmission = CreateSubmission(
+            userToken: userToken,
+            chapter: chapter,
+            verse: verse,
+            submissionUrl: submissionUrl,
+            url: url);
+    var submissionStatus;
+    try {
+      submissionStatus = await createSubmission.submissionStatus();
+      return submissionStatus;
+    } on TimeoutException catch (_) {
+      return submissionStatus = "ConnectionTimedOut";
+    } on SocketException catch (_) {
+      return submissionStatus = "NoInternet";
+    } catch (e) {
+      throw e;
+    }
   }
 
   Widget _bottomNavBar() {
@@ -289,7 +539,9 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
-                  child: _cupertinoSinglePicker(), width: MediaQuery.of(context).size.width, height: 200),
+                  child: _cupertinoSinglePicker(),
+                  width: MediaQuery.of(context).size.width,
+                  height: 200),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.min,
