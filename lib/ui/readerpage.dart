@@ -28,6 +28,7 @@ class SurahReaderPage extends StatefulWidget {
 
 class _SurahReaderPageState extends State<SurahReaderPage> {
   Future<Surah>? futureSurah;
+  bool isTimeout = false, hasNoInternet = false;
 
   int get indexID => widget.selectedSurahIndex;
 
@@ -49,7 +50,13 @@ class _SurahReaderPageState extends State<SurahReaderPage> {
     api.setReqUrl = reqUrl;
     api.setExcludedText = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم";
     api.setSelectedSurah = indexID;
-    futureSurah = api.loadSurah();
+    try {
+      futureSurah = api.loadSurah().timeout(Duration(seconds: 10));
+    } on TimeoutException catch (_) {
+      isTimeout = true;
+    } on SocketException catch (_) {
+      hasNoInternet = true;
+    }
   }
 
   @override
@@ -115,20 +122,24 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
   }
 
   void _nextPage() {
-    if (_focusedIndex! < _pageCount! - 1) {
-      setState(() {
-        _focusedIndex = _focusedIndex! + 1;
-        _pageController!.jumpToPage(_focusedIndex!.toInt());
-      });
+    if (!SurahReaderPage.of(context).hasNoInternet) {
+      if (_focusedIndex! < _pageCount! - 1) {
+        setState(() {
+          _focusedIndex = _focusedIndex! + 1;
+          _pageController!.jumpToPage(_focusedIndex!.toInt());
+        });
+      }
     }
   }
 
   void _prevPage() {
-    if (_focusedIndex! > 0) {
-      setState(() {
-        _focusedIndex = _focusedIndex! - 1;
-        _pageController!.jumpToPage(_focusedIndex!.toInt());
-      });
+    if (!SurahReaderPage.of(context).hasNoInternet) {
+      if (_focusedIndex! > 0) {
+        setState(() {
+          _focusedIndex = _focusedIndex! - 1;
+          _pageController!.jumpToPage(_focusedIndex!.toInt());
+        });
+      }
     }
   }
 
@@ -211,12 +222,29 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
             ),
           );
         } else if (snapshot.hasError) {
+          if (snapshot.error.toString().contains('errno = 7')) {
+            SurahReaderPage.of(context).hasNoInternet = true;
+            return Container(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "No internet connection available.",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ));
+          }
           return Container(
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("${snapshot.error}"),
+                  Text(
+                    "${snapshot.error}",
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ));
         }
@@ -490,7 +518,12 @@ class _SurahPageBuilderState extends State<SurahPageBuilder> {
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
         TextButton(
-          onPressed: () => _popModalBottomSheet(context),
+          onPressed: () {
+            if (SurahReaderPage.of(context).hasNoInternet) {
+              return null;
+            }
+            _popModalBottomSheet(context);
+          },
           child: RichText(
             text: TextSpan(
                 style: TextStyle(
